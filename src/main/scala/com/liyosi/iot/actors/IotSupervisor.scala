@@ -1,6 +1,6 @@
 package com.liyosi.iot.actors
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ Actor, ActorLogging, Props }
 
 /**
  * Created by liyosi on Jun, 2019

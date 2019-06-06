@@ -9,9 +9,8 @@ import com.liyosi.iot.actors.IotSupervisor
 object IotApp extends App {
 
   override def main(args: Array[String]): Unit = {
-    var actorSystem: ActorSystem = ActorSystem("iot-system")
-    var iotSupervisor = actorSystem.actorOf(IotSupervisor.props, "iot-supervisor")
-
+    val actorSystem: ActorSystem = ActorSystem("iot-system")
+    val iotSupervisor = actorSystem.actorOf(IotSupervisor.props, "iot-supervisor")
   }
 
 }
