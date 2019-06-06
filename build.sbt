@@ -4,7 +4,7 @@ lazy val akkaVersion    = "2.6.0-M2"
 lazy val root = (project in file(".")).
   settings(
     inThisBuild(List(
-      organization    := "com.example",
+      organization    := "com.liyosi",
       scalaVersion    := "2.12.7"
     )),
     name := "IoT",
