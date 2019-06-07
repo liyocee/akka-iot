@@ -28,6 +28,7 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
           deviceActor forward trackMsg
         case None => // register device the device
           val deviceActor = context.actorOf(Device.props(trackMsg.groupId, trackMsg.deviceId))
+          context.watch(deviceActor)
           deviceIdToActor += trackMsg.deviceId -> deviceActor
           actorToDeviceId += deviceActor -> trackMsg.deviceId
           deviceActor forward trackMsg

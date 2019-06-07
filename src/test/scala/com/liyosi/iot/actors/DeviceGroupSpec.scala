@@ -71,11 +71,9 @@ class DeviceGroupSpec(_system: ActorSystem)
     // terminate device
     testProbe.watch(registeredDevice)
     registeredDevice ! PoisonPill
-
-    // termination not correctly working when we send a poison pill message
-
+    //    testProbe.expectTerminated(registeredDevice)
+//
 //    testProbe.awaitAssert {
-//      testProbe.expectTerminated(registeredDevice)
 //      // ensure the terminated device is no longer tracked
 //      deviceGroup.tell(DeviceGroup.RequestDeviceList(3L), testProbe.ref)
 //      val response2 = testProbe.expectMsgType[DeviceGroup.ReplyRequestDeviceList]
