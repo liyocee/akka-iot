@@ -3,6 +3,7 @@ package com.liyosi.iot.actors
 import akka.actor.ActorSystem
 import akka.testkit.{ TestKit, TestProbe }
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
+import scala.concurrent.duration._
 
 /**
  * Created by liyosi on Jun, 2019
@@ -12,7 +13,7 @@ class DeviceSpec(_system: ActorSystem) extends TestKit(_system)
   with WordSpecLike
   with BeforeAndAfterAll {
 
-  def this() = this(ActorSystem("iot-test"))
+  def this() = this(ActorSystem("iot-test-device"))
 
   "reply with an empty reading if no temperature is known" in {
     val testProbe = TestProbe()
@@ -41,5 +42,23 @@ class DeviceSpec(_system: ActorSystem) extends TestKit(_system)
     val readResponse = testProbe.expectMsgType[Device.ReadTemperatureResponse]
     readResponse.requestId shouldBe 2L
     readResponse.value shouldBe Some(temp)
+  }
+
+  "successfully track a device for the correct groupId, deviceId tracking" in {
+    val testProbe = TestProbe()
+    val deviceActor = system.actorOf(Device.props("group", "device"))
+
+    deviceActor.tell(DeviceManager.RequestTrackDevice("group", "device"), testProbe.ref)
+
+    testProbe.expectMsg(DeviceManager.DeviceRegistered)
+    testProbe.lastSender shouldBe deviceActor
+  }
+
+  "ignore a wrong device tracking request" in {
+    val testProbe = TestProbe()
+    val deviceActor = system.actorOf(Device.props("group", "device"))
+
+    deviceActor.tell(DeviceManager.RequestTrackDevice("wrongGroup", "wrongDevice"), testProbe.ref)
+    testProbe.expectNoMessage(500.milliseconds)
   }
 }

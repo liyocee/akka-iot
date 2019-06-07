@@ -33,5 +33,13 @@ class Device(groupId: String, deviceId: String) extends Actor with ActorLogging 
     case RecordTemperature(requestId, value) =>
       lastTemperatureRead = Some(value)
       sender() ! TemperatureRecorded(requestId)
+
+    case DeviceManager.RequestTrackDevice(`groupId`, `deviceId`) =>
+      sender() ! DeviceManager.DeviceRegistered
+
+    case DeviceManager.RequestTrackDevice(groupId, deviceId) =>
+      log.warning(
+        "Ignoring Tracking device request for {} - {}. This actor is already responsible for {} - {}.",
+        groupId, deviceId, this.groupId, this.deviceId)
   }
 }
